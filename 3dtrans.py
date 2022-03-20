@@ -1,7 +1,7 @@
 from graphics import *
 import numpy as np
 from math import *
-from time import sleep
+
 
 
 class Point3D:
@@ -13,7 +13,11 @@ class Point3D:
         rad = angle * pi / 180
         cosa = cos(rad)
         sina = sin(rad)
-        matrix = np.array([[1,0,0,0], [0, cosa, -sina, 0], [0,sina, cosa, 0], [0,0,0,1]])
+        matrix = np.array(
+            [[1,0,0,0], 
+            [0, cosa, -sina, 0], 
+            [0,sina, cosa, 0], 
+            [0,0,0,1]])
         vector = np.array([self.x, self.y, self.z,1])
         result = matrix.dot(vector)
         return Point3D(result[0], result[1], result[2])
@@ -23,7 +27,12 @@ class Point3D:
         rad = angle * pi / 180
         cosa = cos(rad)
         sina = sin(rad)
-        matrix = np.array([[cosa,0,sina,0], [0, 1, 0, 0], [-sina,0, cosa, 0], [0,0,0,1]])
+        matrix = np.array([
+            [cosa,0,sina,0], 
+            [0, 1, 0, 0], 
+            [-sina,0, cosa, 0], 
+            [0,0,0,1]
+            ])
         vector = np.array([self.x, self.y, self.z,1])
         result = matrix.dot(vector)
         return Point3D(result[0], result[1], result[2])
@@ -33,11 +42,57 @@ class Point3D:
         rad = angle * pi / 180
         cosa = cos(rad)
         sina = sin(rad)
-        matrix = np.array([[cosa, -sina ,0,0], [sina, cosa , 0, 0], [0 ,0, 1, 0], [0,0,0,1]])
+        matrix = np.array([
+            [cosa, -sina ,0,0], 
+            [sina, cosa , 0, 0], 
+            [0 ,0, 1, 0], 
+            [0,0,0,1]
+            ])
         vector = np.array([self.x, self.y, self.z,1])
         result = matrix.dot(vector)
         return Point3D(result[0], result[1], result[2])
- 
+    
+    def translate(self, xTrans, yTrans, zTrans):
+        matrix = np.array([
+            [1,0,0,xTrans], 
+            [0,1,0,yTrans], 
+            [0,0,1,zTrans], 
+            [0,0,0,1]
+            ])
+        vector = np.array([self.x, self.y, self.z,1])
+        result = matrix.dot(matrix, vector)
+        return Point3D(result[0], result[1], result[2])
+
+    def Shear (self, Shx,Shy,Shz):
+        Shxy = np.array([
+            [1, 0, Shx, 0], 
+            [0, 1, Shy, 0],
+            [0, 0, 1, 0],
+            [0,0,0,1]
+            ])
+        Shyz = np.array([
+            [1,0,0,0],
+            [0, Shy, 0,0],
+            [0, Shz, 1,0],
+            [0,0,0,1]
+            ])
+        Shxz = np.array([
+            [Shx, 0, 0, 0],
+            [0, 1, 0, 0],
+            [Shz, 0, 1,0],
+            [0,0,0,1]
+            ])
+        vector = np.array ([self.x, self.y, self.z, 1])
+        result = np.array()
+        if Shz == 0:
+            result = Shxy.dot(vector)
+        elif Shy == 0:
+            result = Shxz.dot(vector)
+        elif Shx == 0:
+            result = Shyz.dot(vector)
+        
+        return Point3D(result[0], result[1], result[2])
+
     def project(self, win_width, win_height, fov, viewer_distance):
         """ Transforms this 3D point to 2D using a perspective projection. """
         factor = fov / (viewer_distance + self.z)
@@ -45,10 +100,16 @@ class Point3D:
         y = -self.y * factor + win_height / 2
         return Point3D(x, y, 1)
 
+    
+
+
         
 
 
 def main():
+
+    angleX, angleY, angleZ = 45, 0, 0
+    xTrans, yTrans, zTrans = 0, 0, 0
     points = [Point3D(-1,1,-1),
             Point3D(1,1,-1),
             Point3D(1,-1,-1),
@@ -58,19 +119,16 @@ def main():
             Point3D(1,-1,1),
             Point3D(-1,-1,1)
         ]
-
-    # Define the vertices that compose each of the 6 faces. These numbers are
-    # indices to the vertices list defined above.
     faces = [[0,1,2,3],[1,5,6,2],[5,4,7,6],[4,0,3,7],[0,4,5,1],[3,2,6,7]]
 
-    angleX, angleY, angleZ = 0, 0, 0
-
-    win = GraphWin('Test', 640, 480)
+    width, height = 640, 400
+    win = GraphWin('Test', width, height)
     win.setBackground('white')
     lines = []
     transformedPoints = []
     for i in range(len(points)):
-        transformedPoints.append(points[i].project(640, 400, 500, 4))
+        temp = points[i].rotateX(angleX).rotateY(angleY).rotateZ(angleZ)
+        transformedPoints.append(temp.project(640, 400, 500, 4))
 
     for i in faces:
         lines.append(Line(Point(transformedPoints[i[0]].x, transformedPoints[i[0]].y), Point(transformedPoints[i[1]].x, transformedPoints[i[1]].y)))
