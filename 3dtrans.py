@@ -254,9 +254,9 @@ def main(operation, values, points):
     
     #Melakukan proyeksi koordinat yang telah di transformasi pada bidang 2 dimensi
     for i in range(len(operatedPoints)):
-        transformedPoints.append(operatedPoints[i].project(640, 400, 500, 6))
+        transformedPoints.append(operatedPoints[i].project(width, height, 500, 6))
 
-    win = GraphWin('Test', width, height)
+    win = GraphWin('3D Transformation', width, height)
     win.setBackground('white')
 
     #Menentukan nilai garis pembentuk balok
@@ -296,5 +296,6 @@ points = [Point3D(-1,1,-1),
             Point3D(1,-1,1),
             Point3D(-1,-1,1)
             ]
+
 op, val = question()
 main(op, val, points)
