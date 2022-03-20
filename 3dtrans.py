@@ -60,10 +60,10 @@ class Point3D:
             [0,0,0,1]
             ])
         vector = np.array([self.x, self.y, self.z,1])
-        result = matrix.dot(matrix, vector)
+        result = matrix.dot(vector)
         return Point3D(result[0], result[1], result[2])
 
-    def Shear (self, Shx,Shy,Shz):
+    def Shear(self, Shx,Shy,Shz):
         Shxy = np.array([
             [1, 0, Shx, 0], 
             [0, 1, Shy, 0],
@@ -93,6 +93,44 @@ class Point3D:
         
         return Point3D(result[0], result[1], result[2])
 
+    def rotateArbitraryAxis(self, point1, point2, angle):
+        #Determining arbitrary axis
+        xVect = point2[0] - point1[0]
+        yVect = point2[1] - point1[1]
+        zVect = point2[2] - point1[2]
+        beta, miu = 0,0
+        if zVect == 0:
+            if xVect > 0: 
+                beta = 90
+            else:
+                beta = 270
+        else:
+            beta = atan(xVect/ zVect) * 180 / pi
+        if xVect **2 + zVect**2 == 0:
+            if yVect > 0:
+                miu = 90
+            else:
+                miu = 270
+        else:
+            miu = atan (yVect / sqrt(xVect **2 + zVect**2)) * 180 / pi
+        step1 = self.translate(0 - point1[0], 0 - point1[1], 0 - point1[2])
+        step2 = step1.rotateY(-beta).rotateX(miu).rotateZ(angle)
+        step3 = step2.rotateX(-miu).rotateY(beta)
+        result = step3.translate(point1[0] - 0, point1[1] - 0, point1[2] - 0)
+
+        return result
+    
+    def scale(self, factor):
+        matrix = np.array([
+            [factor, 0, 0, 0],
+            [0, factor, 0, 0],
+            [0,0,factor, 0],
+            [0,0,0,1]
+        ])
+        vector = np.array([self.x, self.y, self.z, 1])
+        result = matrix.dot(vector)
+        return Point3D(result[0], result[1], result[2])
+
     def project(self, win_width, win_height, fov, viewer_distance):
         """ Transforms this 3D point to 2D using a perspective projection. """
         factor = fov / (viewer_distance + self.z)
@@ -100,16 +138,17 @@ class Point3D:
         y = -self.y * factor + win_height / 2
         return Point3D(x, y, 1)
 
-    
-
-
-        
-
-
 def main():
-
-    angleX, angleY, angleZ = 45, 0, 0
+    #angle for rotation
+    angleX, angleY, angleZ = 0, 0, 0
+    #translation
     xTrans, yTrans, zTrans = 0, 0, 0
+    #Arbitrary axis
+    point1 = [0,0,0]
+    point2 = [0,0,1]
+    #scaling
+    scale = 1
+
     points = [Point3D(-1,1,-1),
             Point3D(1,1,-1),
             Point3D(1,-1,-1),
@@ -128,6 +167,8 @@ def main():
     transformedPoints = []
     for i in range(len(points)):
         temp = points[i].rotateX(angleX).rotateY(angleY).rotateZ(angleZ)
+        temp = temp.translate(xTrans, yTrans, zTrans)
+        temp = temp.scale(scale)
         transformedPoints.append(temp.project(640, 400, 500, 4))
 
     for i in faces:
