@@ -151,7 +151,7 @@ def question():
         5. Scaling
         6. I just wanna see the untransformed box
         Only answer with the number from 1 to 6!
-        (example: to do rotation, input '1' without the quotation)
+        (example: to do translation, input '1' without the quotation)
         Input: """))
     #Ketika pengguna memasukan nilai diluar yang diterima, program akan dihentikan
     if operation > 6 or operation < 1:
@@ -185,7 +185,7 @@ def question():
     #Operasi 4 adalah rotasi pada arbitrary axis, bagian ini untuk memasukan axis dan sudut rotasi
     elif operation == 4:
         x1, y1,z1 = input("Enter the 1st point of the arbitrary axis (Format: x y z, Example: for point P(1,1,1) please input '1 1 1' without the quotation\nInput: ").split()
-        x2, y2,z2 = input("Enter the 1st point of the arbitrary axis (Format: x y z, Example: for point P(1,1,1) please input '1 1 1' without the quotation\nInput: ").split()
+        x2, y2,z2 = input("Enter the 2nd point of the arbitrary axis (Format: x y z, Example: for point P(1,1,1) please input '1 1 1' without the quotation\nInput: ").split()
         angle = int(input("By how many degrees?\nInput: "))
         values = [[int(x1), int(y1), int(z1)], [int(x2), int(y2), int(z2)], [angle,0,0]]
     #Operasi 5 adalah scaling, bagian ini untuk memasukan seberapa besar scaling akan dilakukan
