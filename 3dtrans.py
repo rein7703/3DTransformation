@@ -209,7 +209,7 @@ def main(operation, values, points):
     # 0 1 2 3 tersebut merujuk kepada index pada array points
     faces = [[0,1,2,3],[1,5,6,2],[5,4,7,6],[4,0,3,7],[0,4,5,1],[3,2,6,7]]
 
-    width, height = 640, 400
+    width, height = 1280, 720
     #Untuk menyimpan garis yang dibentuk:
     lines = []
     #Untuk menyimpan titik yang dilakukan transformasi:
