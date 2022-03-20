@@ -277,6 +277,12 @@ def main(operation, values):
     #Menggambar garis pembentuk balok
     for i in lines:
         i.draw(win)
+
+    for i in range(len(transformedPoints)):
+        p = Text(Point(transformedPoints[i].x, transformedPoints[i].y), "{:.2f}, {:.2f}, {:.2f}".format(operatedPoints[i].x, operatedPoints[i].y, operatedPoints[i].z))
+        p.setSize(8)
+        p.setTextColor('Red')
+        p.draw(win)   
     win.getMouse()
     win.close()
 
