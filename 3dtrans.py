@@ -156,7 +156,7 @@ def question():
     #Ketika pengguna memasukan nilai diluar yang diterima, program akan dihentikan
     if operation > 6 or operation < 1:
         print("INVALID INPUT")
-        sys.exit
+        sys.exit()
     
     #Operasi 1 adalah translasi, bagian ini untuk memasukan nilai translasi
     if operation == 1:
@@ -201,18 +201,9 @@ def question():
 
 
 #Fungsi ini merupakan fungsi operasi utama dari program 
-def main(operation, values):
+def main(operation, values, points):
     #Koordinat titik telah pre-assigned 
-    points = [Point3D(-1,1,-1),
-                Point3D(1,1,-1),
-                Point3D(1,-1,-1),
-                Point3D(-1,-1,-1),
-                Point3D(-1,1,1),
-                Point3D(1,1,1),
-                Point3D(1,-1,1),
-                Point3D(-1,-1,1)
-            ]
-
+    p = 0
     # variabel ini menyimpan titik yang harus dihubungkan untuk membentuk sebuah permukaan pada balok
     # misal 0 1 2 3 artinya sisi pertama terbentuk dengan menghubungkan titik 0 1 2 dan 3
     # 0 1 2 3 tersebut merujuk kepada index pada array points
@@ -283,10 +274,27 @@ def main(operation, values):
         p = Text(Point(transformedPoints[i].x, transformedPoints[i].y), "{:.2f}, {:.2f}, {:.2f}".format(operatedPoints[i].x, operatedPoints[i].y, operatedPoints[i].z))
         p.setSize(8)
         p.setTextColor('Red')
-        p.draw(win)   
+        p.draw(win) 
+
+    ask = int(input("Do you want to do another operation?\nInput 1 for yes, another to exit (number only).\nInput: "))
+    if ask==1:
+        op, val = question()
+        win.close()
+        main(op,val, operatedPoints)
+    else:
+        sys.exit()  
     win.getMouse()
     win.close()
 
 #Nilai ini bertujuan agar fungsi utama tahu operasi apa yang dilakukan dan besaran nilai transformasinya
+points = [Point3D(-1,1,-1),
+            Point3D(1,1,-1),
+            Point3D(1,-1,-1),
+            Point3D(-1,-1,-1),
+            Point3D(-1,1,1),
+            Point3D(1,1,1),
+            Point3D(1,-1,1),
+            Point3D(-1,-1,1)
+            ]
 op, val = question()
-main(op, val)
+main(op, val, points)
