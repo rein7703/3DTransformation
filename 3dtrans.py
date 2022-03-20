@@ -1,6 +1,7 @@
 from graphics import *
 import numpy as np
 from math import *
+from time import sleep
 
 
 class Point3D:
@@ -48,7 +49,6 @@ class Point3D:
 
 
 def main():
-    
     points = [Point3D(-1,1,-1),
             Point3D(1,1,-1),
             Point3D(1,-1,-1),
@@ -61,21 +61,29 @@ def main():
 
     # Define the vertices that compose each of the 6 faces. These numbers are
     # indices to the vertices list defined above.
-    faces = [(0,1,2,3),(1,5,6,2),(5,4,7,6),(4,0,3,7),(0,4,5,1),(3,2,6,7)]
+    faces = [[0,1,2,3],[1,5,6,2],[5,4,7,6],[4,0,3,7],[0,4,5,1],[3,2,6,7]]
 
     angleX, angleY, angleZ = 0, 0, 0
 
     win = GraphWin('Test', 640, 480)
-
-
     win.setBackground('white')
+    lines = []
+    transformedPoints = []
+    for i in range(len(points)):
+        transformedPoints.append(points[i].project(640, 400, 500, 4))
+
+    for i in faces:
+        lines.append(Line(Point(transformedPoints[i[0]].x, transformedPoints[i[0]].y), Point(transformedPoints[i[1]].x, transformedPoints[i[1]].y)))
+        lines.append(Line(Point(transformedPoints[i[0]].x, transformedPoints[i[0]].y), Point(transformedPoints[i[3]].x, transformedPoints[i[3]].y)))
+        lines.append(Line(Point(transformedPoints[i[1]].x, transformedPoints[i[1]].y), Point(transformedPoints[i[2]].x, transformedPoints[i[2]].y)))
+        lines.append(Line(Point(transformedPoints[i[2]].x, transformedPoints[i[2]].y), Point(transformedPoints[i[3]].x, transformedPoints[i[3]].y)))
+
+    for i in lines:
+        i.draw(win)
 
     win.getMouse()
     win.close()
 
 
-
-
-    
 
 main()
