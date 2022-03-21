@@ -275,6 +275,7 @@ def main(operation, values, points):
     #Menampilkan titik koordinat di x y z
     for i in range(len(transformedPoints)):
         p = Text(Point(transformedPoints[i].x, transformedPoints[i].y), "{:.2f}, {:.2f}, {:.2f}".format(operatedPoints[i].x, operatedPoints[i].y, operatedPoints[i].z))
+        print("{:.2f}, {:.2f}, {:.2f}".format(operatedPoints[i].x, operatedPoints[i].y, operatedPoints[i].z))
         p.setSize(8)
         p.setTextColor('Red')
         p.draw(win) 
