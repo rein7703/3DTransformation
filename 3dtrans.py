@@ -114,9 +114,12 @@ class Point3D:
         else:
             miu = atan (yVect / sqrt(xVect **2 + zVect**2)) * 180 / pi
         step1 = self.translate(0 - point1[0], 0 - point1[1], 0 - point1[2])
-        step2 = step1.rotateY(-beta).rotateX(miu).rotateZ(angle)
-        step3 = step2.rotateX(-miu).rotateY(beta)
-        result = step3.translate(point1[0] - 0, point1[1] - 0, point1[2] - 0)
+        step2 = step1.rotateY(-beta)
+        step3 = step2.rotateX(miu)
+        step4 = step3.rotateZ(angle)
+        step5 = step4.rotateX(-miu)
+        step6 = step5.rotateY(beta)
+        result = step6.translate(point1[0] - 0, point1[1] - 0, point1[2] - 0)
 
         return result
     #Scaling
@@ -287,7 +290,7 @@ def main(operation, values, points):
     win.close()
 
 #Nilai ini bertujuan agar fungsi utama tahu operasi apa yang dilakukan dan besaran nilai transformasinya
-points = [Point3D(-1,1,-1),
+"""points = [Point3D(-1,1,-1),
             Point3D(1,1,-1),
             Point3D(1,-1,-1),
             Point3D(-1,-1,-1),
@@ -295,7 +298,14 @@ points = [Point3D(-1,1,-1),
             Point3D(1,1,1),
             Point3D(1,-1,1),
             Point3D(-1,-1,1)
-            ]
-
+            ]"""
+points = [Point3D(2,3,2),
+            Point3D(4,3,2),
+            Point3D(4,5,2),
+            Point3D(2,5,2),
+            Point3D(4,5,6),
+            Point3D(6,5,6),
+            Point3D(6,7,6),
+            Point3D(4,7,6)]
 op, val = question()
 main(op, val, points)
